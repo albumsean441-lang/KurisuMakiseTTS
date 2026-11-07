@@ -1,7 +1,23 @@
-# KurisuMakiseTTS — 牧濑红莉栖 中文/日语 TTS 微调模型
+---
+license: apache-2.0
+language:
+  - ja
+  - zh
+library_name: gpt-sovits
+base_model:
+  - lj1995/GPT-SoVITS
+tags:
+  - text-to-speech
+  - voice-cloning
+  - gpt-sovits
+  - anime
+  - japanese
+  - chinese
+  - lora
+pipeline_tag: text-to-speech
+---
 
-[![Hugging Face](https://img.shields.io/badge/🤗%20Model-FishelKET%2FKurisuMakiseTTS-yellow)](https://huggingface.co/FishelKET/KurisuMakiseTTS)
-[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+# KurisuMakiseTTS — 牧濑红莉栖 中文/日语 TTS 微调模型
 
 基于 **GPT-SoVITS v5**（dev / turbo 双版本）微调的角色语音模型。
 
@@ -88,6 +104,25 @@
 > 该 CPU 与常见迷你主机/开发板上的 **7840HS** 同属 Zen 4 架构，
 > 因此本文的 CPU RTF 数据可近似参考 7840HS 平台。
 
+
+---
+
+## 📊 客观评测（held-out 测试集，未参与训练）
+
+| 系统 | 日文 SS↑ | 日文 CER↓ | 中文 SS↑ | 中文 CER↓ |
+|---|---|---|---|---|
+| v5dev 底模（零样本） | 82.18 | 17.31 | 82.24 | 13.19 |
+| v2Pro 微调（上一代公开模型） | 81.10 | 13.53 | 80.12 | 14.00 |
+| **v5dev 微调（本仓库）** | 82.85 | 13.59 | 82.18 | **7.41** |
+| **v5turbo 微调（本仓库）** | **83.11** | **12.71** | **82.38** | 12.04 |
+| 真实音频参照 | 83.89 | 10.04 | — | — |
+
+> SS = 说话人嵌入余弦相似度（×100，越接近真实音频基线越好）；
+> CER = Whisper-small 转写字错误率（×100，越低越可懂；10.04 为真实音频上的 ASR 底线）。
+> 评测集为 6 条日文 + 4 条中文，全部未参与训练。方法与复现见 docs/benchmark.md。
+
+**结论：** 微调后中文可懂度（CER）较底模几乎减半，turbo 的说话人相似度逼近真实音频基线。
+
 ---
 
 ## 🔊 试听样例
@@ -95,25 +130,25 @@
 **日文（同一句，两种版本对比）**
 
 dev 版：
-- [▶ dev 版 · 日文](samples/dev_ja.wav)
+<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/dev_ja.wav"></audio>
 
 turbo 版：
-- [▶ turbo 版 · 日文](samples/turbo_ja.wav)
+<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/turbo_ja.wav"></audio>
 
 turbo 版（**CPU 直出**，无 GPU）：
-- [▶ turbo 版 · 日文（CPU 直出）](samples/turbo_ja_cpu.wav)
+<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/turbo_ja_cpu.wav"></audio>
 
 **中文（跨语种）**
 
 dev 版：
-- [▶ dev 版 · 中文](samples/dev_zh.wav)
+<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/dev_zh.wav"></audio>
 
 turbo 版：
-- [▶ turbo 版 · 中文](samples/turbo_zh.wav)
+<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/turbo_zh.wav"></audio>
 
 **参考音频（`ref_audio/`，用于推理时提供语气锚点）**
 
-- [▶ 参考音频 ref1](ref_audio/ref1.wav)
+<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/ref_audio/ref1.wav"></audio>
 
 ---
 
@@ -141,26 +176,14 @@ pip install -r requirements.txt
 | `gsv-v5-pretrained/vocoder.pth` | 声码器 | 同上 |
 | `sv/pretrained_eres2netv2w24s4ep4.ckpt` | 说话人验证 | 同上 |
 
-### 3. 下载本模型权重
-
-**权重不在本仓库**（GitHub 单文件 100MB 限制 + LFS 流量配额），托管在 Hugging Face：
-
-```bash
-# 方式一：hf CLI
-hf download FishelKET/KurisuMakiseTTS --local-dir kurisu_weights
-
-# 方式二：直接下载
-# https://huggingface.co/FishelKET/KurisuMakiseTTS
-```
-
-下载后放到：
+### 3. 放置本模型
 
 ```
 GPT-SoVITS/GPT_SoVITS/pretrained_models/
 └── kurisu/
-    ├── kurisu_v5_gpt.ckpt              （148MB，dev/turbo 共用）
-    ├── kurisu_v5_sovits.pth            （72MB，dev）
-    └── kurisu_v5turbo_sovits.pth       （72MB，turbo）
+    ├── kurisu_v5_gpt.ckpt
+    ├── kurisu_v5_sovits.pth
+    └── kurisu_v5turbo_sovits.pth
 ```
 
 ### 4. 配置并启动
