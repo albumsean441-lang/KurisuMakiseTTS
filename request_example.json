@@ -1,0 +1,10 @@
+{
+  "text": "そう言えば、まともに自己紹介してませんでしたね。牧瀬紅莉栖です。改めまして、よろしく。",
+  "text_lang": "ja",
+  "ref_audio_path": "ref_audio/ref1.wav",
+  "prompt_text": "あなたに会いに来たの、岡部凛太郎さん。じゃなくて…",
+  "prompt_lang": "ja",
+  "media_type": "wav",
+  "streaming_mode": false,
+  "speed_factor": 1.0
+}
