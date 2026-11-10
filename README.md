@@ -1,23 +1,7 @@
----
-license: apache-2.0
-language:
-  - ja
-  - zh
-library_name: gpt-sovits
-base_model:
-  - lj1995/GPT-SoVITS
-tags:
-  - text-to-speech
-  - voice-cloning
-  - gpt-sovits
-  - anime
-  - japanese
-  - chinese
-  - lora
-pipeline_tag: text-to-speech
----
-
 # KurisuMakiseTTS — 牧濑红莉栖 中文/日语 TTS 微调模型
+
+[![Hugging Face](https://img.shields.io/badge/🤗%20Model-FishelKET%2FKurisuMakiseTTS-yellow)](https://huggingface.co/FishelKET/KurisuMakiseTTS)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
 基于 **GPT-SoVITS v5**（dev / turbo 双版本）微调的角色语音模型。
 
@@ -147,25 +131,25 @@ IndexTTS-2.5 中文可懂度最高但音色相似度最低——零样本泛化�
 **日文（同一句，两种版本对比）**
 
 dev 版：
-<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/dev_ja.wav"></audio>
+- [▶ dev 版 · 日文](samples/dev_ja.wav)
 
 turbo 版：
-<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/turbo_ja.wav"></audio>
+- [▶ turbo 版 · 日文](samples/turbo_ja.wav)
 
 turbo 版（**CPU 直出**，无 GPU）：
-<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/turbo_ja_cpu.wav"></audio>
+- [▶ turbo 版 · 日文（CPU 直出）](samples/turbo_ja_cpu.wav)
 
 **中文（跨语种）**
 
 dev 版：
-<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/dev_zh.wav"></audio>
+- [▶ dev 版 · 中文](samples/dev_zh.wav)
 
 turbo 版：
-<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/samples/turbo_zh.wav"></audio>
+- [▶ turbo 版 · 中文](samples/turbo_zh.wav)
 
 **参考音频（`ref_audio/`，用于推理时提供语气锚点）**
 
-<audio controls src="https://huggingface.co/FishelKET/KurisuMakiseTTS/resolve/main/ref_audio/ref1.wav"></audio>
+- [▶ 参考音频 ref1](ref_audio/ref1.wav)
 
 ---
 
@@ -193,14 +177,22 @@ pip install -r requirements.txt
 | `gsv-v5-pretrained/vocoder.pth` | 声码器 | 同上 |
 | `sv/pretrained_eres2netv2w24s4ep4.ckpt` | 说话人验证 | 同上 |
 
-### 3. 放置本模型
+### 3. 下载本模型权重
+
+**权重不在本仓库**（GitHub 单文件 100MB 限制 + LFS 流量配额），托管在 Hugging Face：
+
+```bash
+hf download FishelKET/KurisuMakiseTTS --local-dir kurisu_weights
+```
+
+下载后放到：
 
 ```
 GPT-SoVITS/GPT_SoVITS/pretrained_models/
 └── kurisu/
-    ├── kurisu_v5_gpt.ckpt
-    ├── kurisu_v5_sovits.pth
-    └── kurisu_v5turbo_sovits.pth
+    ├── kurisu_v5_gpt.ckpt              （148MB，dev/turbo 共用）
+    ├── kurisu_v5_sovits.pth            （72MB，dev）
+    └── kurisu_v5turbo_sovits.pth       （72MB，turbo）
 ```
 
 ### 4. 配置并启动
